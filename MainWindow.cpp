@@ -3,6 +3,7 @@
 
 MainWindow::MainWindow(QWidget *parent):QMainWindow(parent),rdock(0)
 {
+    QMainWindow::setWindowIcon(QIcon(":/images/icon.png"));
     
     /*初始化矩阵栈*/
     QStringList matrixList;
@@ -54,7 +55,7 @@ MainWindow::MainWindow(QWidget *parent):QMainWindow(parent),rdock(0)
     
     result = new QTextEdit;
     result->setReadOnly(true);
-    result->setText("<h1>Hello</h1>\n<h1>Hello</h1>\n<h1>Hello</h1>\n");
+    result->setText("<h1>Please contact me at <font color='red'><i>hnsfyfyzlp@126.com</i></font> if you have some question about it</h1>\n");
     bottom = new QDockWidget;
     bottom->setWidget(result);
     connect(bottom, SIGNAL(visibilityChanged(bool)), this, SLOT(bdockClosed(bool)));
@@ -185,7 +186,7 @@ leftDock::leftDock(QWidget *parent):QWidget(parent)
 {
     alg_label = new QLabel("<h3>Algorithm: </h3>");
     AlgorithmGroup = new QButtonGroup;
-    alg1_button = new QRadioButton(tr("Needman-wunch"));
+    alg1_button = new QRadioButton(tr("Needman-wunsch"));
     alg1_button->setChecked(true);
     alg2_button = new QRadioButton("Smith-waterman");
     threshold_line_edit = new QLineEdit("5");
@@ -199,8 +200,8 @@ leftDock::leftDock(QWidget *parent):QWidget(parent)
     
     gap_label = new QLabel("<h3>gap Scoring: </h3>");
     ScoringGroup = new QButtonGroup;
-    linear_button = new QRadioButton("liner");
-    special_button = new QRadioButton("special");
+    linear_button = new QRadioButton("linear");
+    special_button = new QRadioButton("Affine");
     linear_button->setChecked(true);
     ScoringGroup->addButton(linear_button);
     ScoringGroup->addButton(special_button);
@@ -210,11 +211,11 @@ leftDock::leftDock(QWidget *parent):QWidget(parent)
     d_value1_line_edit->setEnabled(true);
     d_value2_line_edit = new QLineEdit("8");
     e_value_line_edit = new QLineEdit("2");
-    d_value1_label = new QLabel("d-value: ");
+    d_value1_label = new QLabel("Existence: ");
     d_value1_label->setBuddy(d_value1_line_edit);
-    d_value2_label = new QLabel("d-value: ");
+    d_value2_label = new QLabel("Existence: ");
     d_value2_label->setBuddy(d_value2_line_edit);
-    e_value_label = new QLabel("e-value: ");
+    e_value_label = new QLabel("Extention: ");
     e_value_label->setBuddy(e_value_line_edit);
     d_value2_line_edit->setEnabled(false);
     e_value_line_edit->setEnabled(false);
@@ -946,6 +947,9 @@ void Align::putIntoScreen(int times)
             }
         }
         
+        QString seq1_index = QString::number(prequelSeq[i][prequelSeq[i].count()-1].y()+1);
+        QString seq2_index = QString::number(prequelSeq[i][prequelSeq[i].count()-1].x()+1);
+        
         QString gap;
         for (int i=0; i<seq1.length(); i++)
         {
@@ -954,6 +958,9 @@ void Align::putIntoScreen(int times)
             else
                 gap += "<font color='green'>*</font>";
         }
+        seq1 = seq1_index + "\t" + seq1;
+        seq2 = seq2_index + "\t" + seq2;
+        
         int currentScore = alignBlock[ prequelSeq[i][0].x() ][ prequelSeq[i][0].y() ]->score;
         
         showInScreen += seq1 + "<br><font color='red'>" +gap +
